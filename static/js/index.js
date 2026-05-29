@@ -8,22 +8,20 @@ $(document).ready(function() {
       $(".navbar-menu").toggleClass("is-active");
     });
 
-    var options = {
-			slidesToScroll: 1,
-			slidesToShow: 1,
-			loop: true,
-			infinite: true,
-			autoplay: true,
-			autoplaySpeed: 5000,
-			breakpoints: [
-				{ changePoint: 480, slidesToShow: 1, slidesToScroll: 1 },
-				{ changePoint: 640, slidesToShow: 1, slidesToScroll: 1 },
-				{ changePoint: 768, slidesToShow: 1, slidesToScroll: 1 }
-			]
+    // Carousel options: always show exactly 1 slide, disabled breakpoints to prevent layout issues
+    var carouselOptions = {
+        slidesToScroll: 1,
+        slidesToShow: 1,
+        loop: true,
+        infinite: true,
+        autoplay: true,
+        autoplaySpeed: 5000,
+        breakpoints: []
     }
 
-		// Initialize all divs with carousel class if bulmaCarousel is loaded
+    // Initialize carousels if bulmaCarousel is loaded
     if (typeof bulmaCarousel !== 'undefined') {
-        var carousels = bulmaCarousel.attach('.carousel', options);
+        bulmaCarousel.attach('#results-carousel', carouselOptions);
+        bulmaCarousel.attach('#perf-carousel', carouselOptions);
     }
 })
