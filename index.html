@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="SHELLS: Semantic Head Estimation via Layered Local Sampling">
+  <meta name="keywords" content="SHELLS, 3D Head Reconstruction, DinoV2, Transformer, Mesh Registration, SIGGRAPH 2026">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Topologically Consistent Multi-view 3D Head Reconstruction via Coarse-Guided Layered Surface Sampling</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="./static/js/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title" style="font-size:2.2rem; line-height: 1.2;">
+            Topologically Consistent Multi-view 3D Head Reconstruction via Coarse-Guided Layered Surface Sampling
+          </h1>
+          
+          <div class="is-size-5 publication-authors" style="margin-top: 1.5rem;">
+            <span class="author-block">
+              <a href="https://sites.google.com/site/bolkartt/" target="_blank">Timo Bolkart</a>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=pe5XLTEAAAAJ&hl=en" target="_blank">Daoye Wang</a>,
+            </span>
+            <span class="author-block">
+              <a href="https://prashanth-chandran.github.io/" target="_blank">Prashanth Chandran</a>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors" style="margin-top: 0.25rem;">
+            <span class="author-block">Google</span>
+          </div>
+
+          <div class="is-size-4 publication-venue" style="margin-top: 1.2rem; margin-left: auto; margin-right: auto;">
+            SIGGRAPH 2026
+          </div>
+
+          <div class="publication-links" style="margin-top: 1.5rem;">
+            <span class="link-block">
+              <a href="files/paper.pdf" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon">
+                  <i class="fas fa-file-pdf"></i>
+                </span>
+                <span>Paper</span>
+              </a>
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item">
+          <video autoplay loop muted playsinline>
+            <source src="./videos/head_motion.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <img src="./images/SHELL-representative.jpg" alt="SHELLS Representative Figure">
+        </div>
+      </div>
+      <h2 class="subtitle has-text-justified" style="font-size: 0.95rem; margin-top: 1.5rem; line-height: 1.5;">
+        <strong>TL;DR:</strong> From calibrated multi-view images, SHELLS reconstructs 18k-vertex 3D heads in 0.08 seconds. It aggregates DinoV2 features via projective surface-aware feature sampling, allowing a transformer to predict dense semantic meshes 3.5x faster with 88% less GPU memory than state-of-the-art methods. The result is an efficient, globally consistent multi-view reconstruction framework.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<hr style="width:30%; margin: auto;" />
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths" style="width:88%">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified" style="line-height: 1.6;">
+          We present SHELLS (Semantic Head Estimation via Layered Local Sampling), an efficient feed-forward framework for 3D head reconstruction in dense semantic correspondence from multi-view images. State-of-the-art methods typically refine vertices independently using localized feature volumes. This couples memory-intensive feature sampling to the output mesh resolution, limiting scalability for dense topologies (&ge; 10k vertices) and producing noisy surfaces due to a lack of global context. In contrast, SHELLS decouples feature extraction from mesh resolution via a hierarchical sampling strategy. We extract multi-view features using a DinoV2 backbone with LoRA adaptation, projectively sample a sparse global feature cloud, and predict an intermediate coarse mesh. This coarse prior guides the construction of layered, surface-aware sampling shells that serve as a discrete search space for the final reconstruction. By utilizing a shared transformer architecture, SHELLS maintains global surface consistency while requiring only 12% of the GPU memory of volume-based approaches. Experimental results show that SHELLS reduces median registration error by 21% &ndash; 29% and achieves a 3.5&times; speedup, predicting 18k-vertex meshes in 0.08 seconds. Notably, our model is trained exclusively on synthetic data yet generalizes effectively to real-world captures, eliminating the need for the costly, pre-registered multi-view datasets common in prior work.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr style="width:30%; margin: auto;" />
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths" style="width:88%">
+        <h2 class="title is-3 has-text-centered">Architecture</h2>
+        <div style="text-align: center; margin-top: 1.5rem; margin-bottom: 1.5rem;">
+          <img src="./images/overview_figure.png" alt="SHELLS Architecture Overview" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
+        </div>
+        <div class="content has-text-justified" style="line-height: 1.5; font-size: 0.95rem;">
+          <p>
+            A shared DinoV2 backbone with LoRA adaptation extracts per-view feature maps from the input images (left). The graph stage (top) projectively samples features for a sparse graph and processes them alongside a downsampled tokenized template using an XCiT-based transformer. From the transformer output, a coarse mesh is regressed as an attention-weighted sum over the sampling graph coordinates. This coarse prediction is displaced along its normals to construct sampling shells for surface-aware feature sampling. Finally, the shared transformer aggregates these shell-based features with a full-resolution tokenized template to predict the high-fidelity mesh as an attention-weighted sum of dynamic shell coordinates (bottom).
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr style="width:30%; margin: auto;" />
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths" style="width:88%">
+        <h2 class="title is-3 has-text-centered">Performance registration</h2>
+        <div id="perf-carousel" class="carousel results-carousel" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
+          <div class="item">
+            <video autoplay loop muted playsinline><source src="./videos/sub1_perf1.mp4" type="video/mp4"></video>
+          </div>
+          <div class="item">
+            <video autoplay loop muted playsinline><source src="./videos/sub1_perf2.mp4" type="video/mp4"></video>
+          </div>
+          <div class="item">
+            <video autoplay loop muted playsinline><source src="./videos/sub1_perf3.mp4" type="video/mp4"></video>
+          </div>
+          <div class="item">
+            <video autoplay loop muted playsinline><source src="./videos/sub2_perf1.mp4" type="video/mp4"></video>
+          </div>
+          <div class="item">
+            <video autoplay loop muted playsinline><source src="./videos/sub2_perf2.mp4" type="video/mp4"></video>
+          </div>
+          <div class="item">
+            <video autoplay loop muted playsinline><source src="./videos/sub2_perf3.mp4" type="video/mp4"></video>
+          </div>
+          <div class="item">
+            <video autoplay loop muted playsinline><source src="./videos/sub3_perf1.mp4" type="video/mp4"></video>
+          </div>
+          <div class="item">
+            <video autoplay loop muted playsinline><source src="./videos/sub3_perf2.mp4" type="video/mp4"></video>
+          </div>
+          <div class="item">
+            <video autoplay loop muted playsinline><source src="./videos/sub3_perf3.mp4" type="video/mp4"></video>
+          </div>
+        </div>
+        <div class="content has-text-justified" style="line-height: 1.5; font-size: 0.95rem;">
+          <p>
+            SHELLS can be applied frame-by-frame to dynamic facial performances and produces temporally smooth and expressive performance registrations.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr style="width:30%; margin: auto;" />
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths" style="width:88%">
+        <h2 class="title is-3 has-text-centered">Implicit occlusion handling</h2>
+        <div style="text-align: center; margin-top: 1.5rem; margin-bottom: 1.5rem;">
+          <video autoplay loop muted playsinline style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
+            <source src="./videos/occlusion_handling.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="content has-text-justified" style="line-height: 1.5; font-size: 0.95rem;">
+          <p>
+            SHELLS handles occluded regions like the inner mouth cavity by correlating these with the visible areas to regress all vertices holistically.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr style="width:30%; margin: auto;" />
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths" style="width:88%">
+        <h2 class="title is-3 has-text-centered">Robustness to number of views</h2>
+        <div style="text-align: center; margin-top: 1.5rem; margin-bottom: 1.5rem;">
+          <img src="./images/view-ablation.png" alt="SHELLS Robustness to Number of Views" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
+        </div>
+        <div class="content has-text-justified" style="line-height: 1.5; font-size: 0.95rem;">
+          <p>
+            Thanks to random camera dropout during training and mean-variance feature fusion, SHELLS is robust to the number of input views at inference time. Reconstructions remain plausible and detailed even with as few as two input views (featuring large disparities that challenge traditional MVS methods), and scale gracefully as more views (e.g., 3, 4, or 10) are added.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr style="width:30%; margin: auto;" />
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX Citation</h2>
+    <pre><code>@inproceedings{Bolkart2026SHELLS,
+  author    = {Bolkart, Timo and Wang, Daoye and Chandran, Prashanth},
+  title     = {Topologically Consistent Multi-view 3D Head Reconstruction via Coarse-Guided Layered Surface Sampling},
+  year      = {2026},
+  publisher = {Association for Computing Machinery},
+  keywords  = {Registration, 3D Head Reconstruction},
+  series    = {SIGGRAPH Conference Papers '26}
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content has-text-centered">
+          <p>
+            This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            We thank <a href="https://github.com/nerfies/nerfies.github.io">NeRFies</a> for providing the website template.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
