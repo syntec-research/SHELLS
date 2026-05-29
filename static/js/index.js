@@ -8,8 +8,19 @@ $(document).ready(function() {
       $(".navbar-menu").toggleClass("is-active");
     });
 
-    // Carousel options: always show exactly 1 slide, disabled breakpoints to prevent layout issues
-    var carouselOptions = {
+    // Teaser carousel options: 2 items, so infinite is set to false to prevent cloning/width bugs
+    var teaserOptions = {
+        slidesToScroll: 1,
+        slidesToShow: 1,
+        loop: true,
+        infinite: false,
+        autoplay: true,
+        autoplaySpeed: 5000,
+        breakpoints: []
+    }
+
+    // Performance carousel options: 9 items, so infinite is safe to use
+    var perfOptions = {
         slidesToScroll: 1,
         slidesToShow: 1,
         loop: true,
@@ -21,7 +32,7 @@ $(document).ready(function() {
 
     // Initialize carousels if bulmaCarousel is loaded
     if (typeof bulmaCarousel !== 'undefined') {
-        bulmaCarousel.attach('#results-carousel', carouselOptions);
-        bulmaCarousel.attach('#perf-carousel', carouselOptions);
+        bulmaCarousel.attach('#results-carousel', teaserOptions);
+        bulmaCarousel.attach('#perf-carousel', perfOptions);
     }
 })
