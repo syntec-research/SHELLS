@@ -9,6 +9,7 @@ $(document).ready(function() {
     });
 
     // Teaser carousel options: 2 items, so infinite is set to false to prevent cloning/width bugs
+    // Force slidesToShow: 1 on all screen widths using a large changePoint breakpoint
     var teaserOptions = {
         slidesToScroll: 1,
         slidesToShow: 1,
@@ -16,10 +17,13 @@ $(document).ready(function() {
         infinite: false,
         autoplay: true,
         autoplaySpeed: 5000,
-        breakpoints: []
+        breakpoints: [
+            { changePoint: 100000, slidesToShow: 1, slidesToScroll: 1 }
+        ]
     }
 
     // Performance carousel options: 9 items, so infinite is safe to use
+    // Force slidesToShow: 1 on all screen widths using a large changePoint breakpoint
     var perfOptions = {
         slidesToScroll: 1,
         slidesToShow: 1,
@@ -27,7 +31,9 @@ $(document).ready(function() {
         infinite: true,
         autoplay: true,
         autoplaySpeed: 5000,
-        breakpoints: []
+        breakpoints: [
+            { changePoint: 100000, slidesToShow: 1, slidesToScroll: 1 }
+        ]
     }
 
     // Initialize carousels if bulmaCarousel is loaded

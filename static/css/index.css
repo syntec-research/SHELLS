@@ -112,6 +112,12 @@ body {
 
 .results-carousel {
   overflow: hidden;
+  width: 100%;
+}
+
+.results-carousel .slider {
+  overflow: hidden;
+  width: 100%;
 }
 
 .results-carousel .slider-container .slider-item {
